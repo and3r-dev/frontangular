@@ -1,0 +1,108 @@
+<div class="row">
+  <div class="col-md-10 offset-md-1">
+    <h5>Placa|Modelo|Ano|Cor</h5>
+    <div class="row">
+      <div class="col-md-11">
+        <input type="text" class="form-control">
+      </div>
+      <div class="col-md-1">
+        <button class="button-custom background-custom-color text-white">Buscar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 offset-md-1 mt-5">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Ações</th>
+          <th>Placa</th>
+          <th>Modelo</th>
+          <th>Ano</th>
+          <th>Cor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let veiculo of veiculosData">
+          <td>
+            <button class="btn btn-primary">Editar</button>
+            <button class="btn btn-danger ms-2">Deletar</button>
+          </td>
+          <td>{{ veiculo.id }}</td>
+          <td>{{ veiculo.placa }}</td>
+          <td>{{ veiculo.cor }}</td>
+          <td>{{ veiculo.modelo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col-md-1 offset-md-1">
+      <p>Total: {{ totalVeiculos }}</p>
+    </div>
+    <div class="col-md-3 offset-md-7" style="border: 1px solid red">
+      <button class="button-custom background-custom-color text-white ms-1">
+        <i class="fa fa-step-backward"></i>
+      </button>
+      <button class="button-custom background-custom-color text-white ms-1">
+        <i class="fa fa-fast-backward"></i>
+      </button>
+      <button class="button-custom background-custom-color text-white ms-1">
+        {{ page }}
+      </button>
+      <button class="button-custom background-custom-color text-white ms-1">
+        <i class="fa fa-play"></i>
+      </button>
+      <button class="button-custom background-custom-color text-white ms-1">
+        <i class="fa fa-step-forward"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="openModal(template)">Create template modal</button>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    This is a modal.
+  </div>
+</ng-template>
+
+<!-- <div class="row">
+  <div class="col-md-10 offset-md-1">
+    <div class="search-container">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title" />
+      <button (click)="searchPosts()">Search</button>
+    </div>
+
+    <table #dataTable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr>
+          <th scope="col">Ações</th>
+          <th scope="col">Placa</th>
+          <th scope="col">Modelo</th>
+          <th scope="col">Ano</th>
+          <th scope="col">Ano</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let veiculo of veiculosData; index">
+          <th scope="row">Ação</th>
+          <td>{{ veiculo.placa }}</td>
+          <td>{{ veiculo.modelo }}</td>
+          <td>{{ veiculo.ano }}</td>
+          <td>{{ veiculo.cor }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div> -->
