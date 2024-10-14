@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mt-5">
   <div class="col-md-10 offset-md-1">
     <h5>Placa|Modelo|Ano|Cor</h5>
     <div class="row">
@@ -42,7 +42,7 @@
     <div class="col-md-1 offset-md-1">
       <p>Total: {{ totalVeiculos }}</p>
     </div>
-    <div class="col-md-3 offset-md-7" style="border: 1px solid red">
+    <div class="col-md-3 offset-md-7">
       <button class="button-custom background-custom-color text-white ms-1">
         <i class="fa fa-step-backward"></i>
       </button>
@@ -62,47 +62,51 @@
   </div>
 </div>
 
-<button type="button" class="btn btn-primary" (click)="openModal(template)">Create template modal</button>
-
 <ng-template #template>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Modal</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="closeModal()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    This is a modal.
+    <div class="row">
+      <div class="col-md-10 offeset-md-1">
+        <h4>Cadastro de Veículo</h4>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-5 offset-md-1">
+        <label for="">Marca/Modelo</label>
+        <input type="text" class="form-control">
+      </div>
+      <div class="col-md-5">
+        <label for="">Ano</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-5 offset-md-1">
+        <label for="">Cor</label>
+        <input type="text" class="form-control">
+      </div>
+      <div class="col-md-5">
+        <label for="">Veículo</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-5 offset-md-1">
+        <label for="">Quant. Passageiros</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <label for="">Revisões</label>
+        <button></button>
+      </div>
+    </div>
   </div>
 </ng-template>
 
-<!-- <div class="row">
-  <div class="col-md-10 offset-md-1">
-    <div class="search-container">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title" />
-      <button (click)="searchPosts()">Search</button>
-    </div>
-
-    <table #dataTable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-      <thead>
-        <tr>
-          <th scope="col">Ações</th>
-          <th scope="col">Placa</th>
-          <th scope="col">Modelo</th>
-          <th scope="col">Ano</th>
-          <th scope="col">Ano</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let veiculo of veiculosData; index">
-          <th scope="row">Ação</th>
-          <td>{{ veiculo.placa }}</td>
-          <td>{{ veiculo.modelo }}</td>
-          <td>{{ veiculo.ano }}</td>
-          <td>{{ veiculo.cor }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-</div> -->
