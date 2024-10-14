@@ -1,2 +1,3 @@
 
-<app-tabela-veiculo></app-tabela-veiculo>
+<app-navbar (openModal)="onOpenModal()"></app-navbar>
+<app-tabela-veiculo [showModal]="showModal" (modalFechado)="onCloseModal()"></app-tabela-veiculo>

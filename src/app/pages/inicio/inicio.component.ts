@@ -7,4 +7,14 @@ import { Component } from '@angular/core';
 })
 export class InicioComponent {
 
+  showModal: boolean = false;
+
+  onOpenModal(): void {
+    this.showModal = true;
+  }
+
+  onCloseModal(): void {
+    this.showModal = false;
+  }
+
 }

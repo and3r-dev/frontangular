@@ -1,11 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild, HostListener, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { TabelaVeiculoService } from '../../services/tabela-veiculo/tabela-veiculo.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-// import { Subject } from 'rxjs';
-// import { Config } from 'datatables.net';
-// import { DataTableDirective } from 'angular-datatables';
-
-// import * as $ from 'jquery';
 import { Veiculos } from '../../models/veiculos';
 
 @Component({
@@ -17,11 +12,14 @@ export class TabelaVeiculoComponent implements OnInit {
 
   modalRef?: BsModalRef;
   @Input() showModal: boolean = false;
+  @Output() modalFechado = new EventEmitter<void>();
 
   veiculosData: Veiculos[] = [];
 
   totalVeiculos: number = 0;
   page: number = 1;
+
+  @ViewChild('template') template: TemplateRef<any>;
 
   constructor(
     private _tabelaVeiculoService: TabelaVeiculoService,
@@ -32,6 +30,13 @@ export class TabelaVeiculoComponent implements OnInit {
     this.veiculos();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("teste");
+    if (changes['showModal'] && this.showModal) {
+      this.openModal();
+    }
+  }
+
   veiculos() {
     this._tabelaVeiculoService.veiculos().subscribe((response) => {
       this.veiculosData = response;
@@ -39,8 +44,23 @@ export class TabelaVeiculoComponent implements OnInit {
     });
   }
 
-  openModal(template: TemplateRef<void>) {
-    this.modalRef = this.modalService.show(template);
+  openModal() {
+    this.modalRef = this.modalService.show(this.template, {
+      backdrop: 'static',
+      keyboard: false
+    });
   }
 
+  closeModal() {
+    this.modalRef?.hide();
+    this.showModal = false;
+    this.modalFechado.emit();
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  public onClick(target: HTMLElement) {
+    if (this.modalRef?.content && !target.closest('.modal-content')) {
+      this.closeModal();
+    }
+  }
 }

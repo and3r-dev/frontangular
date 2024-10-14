@@ -10,3 +10,23 @@
   font-size: 1rem;
   line-height: 1.5;
 }
+
+/* modal application */
+body .modal-open {
+  overflow-y: auto !important;
+}
+
+.modal-dialog {
+  width: 80% !important;
+  height: 80% !important;
+  max-width: none !important;
+}
+
+.modal-content {
+  height: 100% !important;
+}
+
+.modal-body {
+  height: calc(100% - 56px) !important;
+  overflow-y: auto !important;
+}
