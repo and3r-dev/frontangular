@@ -3,7 +3,10 @@
     <h5>Placa|Modelo|Ano|Cor</h5>
     <div class="row">
       <div class="col-md-11">
-        <input type="text" class="form-control">
+        <input
+          (keyup)="pesquisaVeiculo($event)"
+          type="text"
+          class="form-control">
       </div>
       <div class="col-md-1">
         <button class="button-custom background-custom-color text-white">Buscar</button>
@@ -24,19 +27,24 @@
           <th>Cor</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let veiculo of veiculosData">
+      <tbody *ngIf="veiculosData.length > 0">
+        <tr *ngFor="let veiculo of veiculosDataFiltered">
           <td>
             <button class="btn btn-primary">Editar</button>
             <button class="btn btn-danger ms-2">Deletar</button>
           </td>
           <td>{{ veiculo.id }}</td>
           <td>{{ veiculo.placa }}</td>
-          <td>{{ veiculo.cor }}</td>
-          <td>{{ veiculo.modelo }}</td>
+          <td class="text-capitalize">{{ veiculo.cor }}</td>
+          <td class="text-capitalize">{{ veiculo.modelo }}</td>
         </tr>
       </tbody>
     </table>
+    <div class="row">
+      <div class="col-md-10 offset-md-1 mt-5" *ngIf="veiculosData.length == 0">
+        <h5>Não existem dados de veículos cadastrados.</h5>
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-1 offset-md-1">
@@ -64,49 +72,104 @@
 
 <ng-template #template>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Modal</h4>
+    <h4 class="modal-title pull-left">
+      Cadastro de Veículo
+    </h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="closeModal()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <div class="row">
-      <div class="col-md-10 offeset-md-1">
-        <h4>Cadastro de Veículo</h4>
+    <form novalidate [formGroup]="veiculoForm">
+      <input type="hidden" formControlName="id">
+      <div class="row mt-3">
+        <div class="col-md-5 offset-md-1">
+          <label for="">Marca/Modelo</label>
+          <input type="text" class="form-control text-capitalize" formControlName="Modelo">
+        </div>
+        <div class="col-md-5">
+          <label for="">Ano</label>
+          <input type="text" class="form-control" formControlName="Ano">
+        </div>
       </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-md-5 offset-md-1">
-        <label for="">Marca/Modelo</label>
-        <input type="text" class="form-control">
+      <div class="row mt-3">
+        <div class="col-md-5 offset-md-1">
+          <label for="">Cor</label>
+          <input type="text" class="form-control text-capitalize" formControlName="Cor">
+        </div>
+        <div class="col-md-5">
+          <label for="">Tipo Veículo</label>
+          <ng-select [items]="tipoVeiculo"
+                    bindLabel="name"
+                    bindValue="id"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="selectedTipoVeiculo">
+            </ng-select>
+        </div>
       </div>
-      <div class="col-md-5">
-        <label for="">Ano</label>
-        <input type="text" class="form-control">
+      <div class="row mt-3">
+        <div class="col-md-5 offset-md-1" *ngIf="selectedTipoVeiculo == 1">
+          <label for="">Quant. Passageiros</label>
+          <input type="number" class="form-control" formControlName="CapacidadePassageiro">
+        </div>
+        <div class="col-md-5 offset-md-1" *ngIf="selectedTipoVeiculo == 2">
+          <label for="">Capacidade de Carga</label>
+          <input type="number" class="form-control" formControlName="CapacidadeCarga">
+        </div>
+        <div class="col-md-5">
+          <label for="">Placa</label>
+          <input type="text" class="form-control" formControlName="Placa">
+        </div>
       </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-md-5 offset-md-1">
-        <label for="">Cor</label>
-        <input type="text" class="form-control">
+      <div class="row" *ngIf="veiculo_id != 0">
+        <div class="col-md-5 offset-md-1">
+          <h5 class="mt-3">Revisões</h5>
+
+        </div>
+        <div class="col-md-5 mt-3">
+          <button class="button-custom mt-2" (click)="openRevision()">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <br>
+          <div class="row mt-2" *ngIf="revision">
+            <div class="col-md-8">
+              <div class="col-md-12">
+                <label for="">KM</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="col-md-12">
+                <label for="">Data</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="col-md-12">
+                <label for="">Valor da Revisão</label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-4 align-vertical-div">
+              <button class="button-custom background-custom-color text-white align-vertical-button">
+                Inserir Revisão
+              </button>
+            </div>
+
+          </div>
+          <div class="col-md-5">
+          </div>
+        </div>
+
       </div>
-      <div class="col-md-5">
-        <label for="">Veículo</label>
-        <input type="text" class="form-control">
+      <div class="row">
+        <div class="col-md-10 offset-md-1 mt-5">
+          <button type="submit"
+            class="button-custom float-end background-custom-color text-white md-2 ms-2"
+            (click)="salvarVeiculo()">
+            <i class="fas fa-save"></i> {{salvarButton}}
+          </button>
+          <button class="button-custom btn-light float-end">Cancelar</button>
+        </div>
       </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-md-5 offset-md-1">
-        <label for="">Quant. Passageiros</label>
-        <input type="text" class="form-control">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10 offset-md-1">
-        <label for="">Revisões</label>
-        <button></button>
-      </div>
-    </div>
+
+    </form>
   </div>
 </ng-template>
 

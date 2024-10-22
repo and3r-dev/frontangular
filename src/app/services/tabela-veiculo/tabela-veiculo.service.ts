@@ -2,6 +2,7 @@ import { Injectable, Input } from '@angular/core';
 import { environment } from './../../utils/constants/envronment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Veiculos } from '../../models/veiculos';
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +17,8 @@ export class TabelaVeiculoService {
     return this.http.get(`${this.apiUrl}veiculos`);
   }
 
-  openModal() {
-    const modalElement = document.getElementById('veiculoModal');
-    if (modalElement) {
-      (modalElement as any).showModal();
-    }
-  }
-
-  ngOnChanges() {
-    if (this.showModal) {
-      this.openModal();
-    }
+  salvarVeiculo(data: Veiculos): Observable<Veiculos> {
+    return this.http.post<Veiculos>(`${this.apiUrl}veiculos`, data);
   }
 }
 
