@@ -20,5 +20,9 @@ export class TabelaVeiculoService {
   salvarVeiculo(data: Veiculos): Observable<Veiculos> {
     return this.http.post<Veiculos>(`${this.apiUrl}veiculos`, data);
   }
+
+  salvarEditarVeiculo(id:number, data: Veiculos): Observable<Veiculos> {
+    return this.http.put<Veiculos>(`${this.apiUrl}veiculos/${id}`, data);
+  }
 }
 

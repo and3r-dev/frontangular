@@ -4,7 +4,21 @@ export interface Veiculos {
   ano: number;
   cor: string;
   modelo: string;
-  carro: string;
-  caminhao: string;
   revisoes: string;
+  CapacidadeCarga: number;
+  CapacidadePassageiro: number;
+  carro: Carro;
+  caminhao: Caminhao;
+}
+
+export interface Carro {
+  id: number;
+  capacidadePassageiro: number;
+  veiculoId: number;
+}
+
+export interface Caminhao {
+  id: number;
+  capacidadeCarga: number;
+  veiculoId: number;
 }
