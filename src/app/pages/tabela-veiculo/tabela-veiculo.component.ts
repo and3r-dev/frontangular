@@ -66,9 +66,10 @@ export class TabelaVeiculoComponent implements OnInit {
 
   veiculos() {
     this._tabelaVeiculoService.veiculos().subscribe((response) => {
+      console.log("veiculos", response);
       this.veiculosData = response.data;
       this.veiculosDataFiltered = response.data;
-      this.totalVeiculos = this.veiculosData.length;
+      this.totalVeiculos = this.veiculosData ? this.veiculosData.length : 0;
     });
   }
 
@@ -94,20 +95,32 @@ export class TabelaVeiculoComponent implements OnInit {
 
   salvarVeiculo() {
 
+    console.log("veiculo_id", this.veiculo_id);
+
     this.veiculoForm.get('TipoVeiculo')?.setValue(this.selectedTipoVeiculo);
 
     if (this.selectedTipoVeiculo == 1) this.veiculoForm.get('CapacidadeCarga')?.setValue(null);
     else this.veiculoForm.get('CapacidadePassageiro')?.setValue(null);
 
     if (this.veiculoForm.valid) {
-      this._tabelaVeiculoService.salvarVeiculo(this.veiculoForm.value).subscribe((response) => {
-        this.toastr.success('Veículo salvo com sucesso!');
-        this.veiculoForm.reset();
-        this.closeModal();
-        this.veiculos();
-      }, (error) => {
-        this.toastr.error('Ocorreu um erro ao salvar o veículo.');
-      });
+      if (this.veiculo_id == 0) {
+        this._tabelaVeiculoService.salvarVeiculo(this.veiculoForm.value).subscribe((response) => {
+          this.toastr.success('Veículo salvo com sucesso!');
+          this.veiculoForm.reset();
+          this.closeModal();
+          this.veiculos();
+        }, (error) => {
+          this.toastr.error('Ocorreu um erro ao salvar o veículo.');
+        });
+      } else {
+        this._tabelaVeiculoService.salvarEditarVeiculo(this.veiculo_id, this.veiculoForm.value).subscribe((response) => {
+          this.toastr.success('Veículo editado com sucesso!');
+          this.closeModal();
+          this.veiculoForm.reset();
+          this.veiculo_id = 0;
+          this.veiculos();
+        });
+      }
     } else {
       this.toastr.error('Preencha todos os campos obrigatórios.');
     }
@@ -128,5 +141,30 @@ export class TabelaVeiculoComponent implements OnInit {
       this.veiculosDataFiltered = pesquisa;
     else
       this.veiculosDataFiltered = this.veiculosData;
+  }
+
+  editarVeiculo(veiculo_id: number) {
+    this.veiculosData.forEach((veiculo) => {
+      if (veiculo.id === veiculo_id) {
+        this.veiculoForm.get('id')?.setValue(veiculo.id);
+        this.veiculoForm.get('Modelo')?.setValue(veiculo.modelo);
+        this.veiculoForm.get('Ano')?.setValue(veiculo.ano);
+        this.veiculoForm.get('Placa')?.setValue(veiculo.placa);
+        this.veiculoForm.get('Cor')?.setValue(veiculo.cor);
+        if (veiculo?.carro) {
+          this.selectedTipoVeiculo = 1;
+          this.veiculoForm.get('CapacidadePassageiro')?.setValue(veiculo.carro.capacidadePassageiro);
+          this.veiculo_id = veiculo.carro.veiculoId;
+        }
+        else {
+          this.selectedTipoVeiculo = 2;
+          this.veiculoForm.get('CapacidadeCarga')?.setValue(veiculo.caminhao.capacidadeCarga);
+          this.veiculo_id = veiculo.caminhao.veiculoId;
+        }
+
+        this.openModal();
+        this.salvarButton = 'Atualizar';
+      }
+    });
   }
 }
